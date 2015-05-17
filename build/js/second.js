@@ -1,1 +1,0 @@
-for(var board=[],boardSize=4,i=0,j=0;4>i;i++);
