@@ -3,6 +3,19 @@ function Painter(){
   var ctx;
   var blockSize = 40;
   var separation = 2;
+  var colorMappings = {
+    '2': 'rgb(238, 228, 218)',
+    '4':'rgb(237, 224, 200)',
+    '8':'rgb(242, 177, 121)',
+    '16':'rgb(245, 149, 99)',
+    '32':'rgb(246, 124, 95)',
+    '64':'rgb(246, 94, 59)',
+    '128':'rgb(237, 207, 114)',
+    '256':'rgb(237, 204, 97)',
+    '512':'rgb(237, 200, 80)',
+    '1024':'rgb(237, 197, 63)',
+    '2048':'rgb(237, 194, 46)'
+  };
 
   if(canvas.getContext){
   	ctx = canvas.getContext('2d');
@@ -15,6 +28,20 @@ function Painter(){
         roundedRect(ctx,(40+separation)*i,(40+separation)*j,blockSize,blockSize,4);
     	}
   	}
+  }
+
+  //opts.cellNumber , opts.cellValue, opts.gameover
+  this.paintCell = function(opts){
+    console.log(opts);
+    if (!opts.gameover){
+      var x = Math.floor(opts.cellNumber/4);
+      var y = opts.cellNumber%4;
+      console.log(opts.cellNumber,x,y);
+
+      ctx.beginPath(); 
+      ctx.fillStyle = colorMappings[opts.cellValue.toString()];
+      roundedRect(ctx,(40+separation)*x,(40+separation)*y,blockSize,blockSize,4);
+    }
   }
 }
 

@@ -20,7 +20,8 @@ function Board(size){
 Board.prototype.randomCell = function(){
 	var randomNumber;
 	var i = 0, j = 0;
-
+	var freeCell, x, y, randomValue;
+	var valueMappings = [2,2,2,2,4];
 	var flatBoard = [];
 	
 	//Traverse Array
@@ -33,18 +34,19 @@ Board.prototype.randomCell = function(){
 	}
 	if(!flatBoard.length){
 		console.log("Gameover");
-		return "Gameover";
+		return {gameover:true};
 	}
 	console.log(flatBoard);	
 	randomNumber = Math.floor((Math.random() * flatBoard.length));
 	//convert randomNumber to coordinates
-	var freeCell = flatBoard[randomNumber];
-	var x = Math.floor(freeCell/this.boardWitdh);
-	var y = freeCell % this.boardWitdh;
+	freeCell = flatBoard[randomNumber];
+	x = Math.floor(freeCell/this.boardWitdh);
+	y = freeCell % this.boardWitdh;
 
-	this.leBoard[x][y] = 1;
+	var randomValue = valueMappings[Math.floor((Math.random() * valueMappings.length))];
+	this.leBoard[x][y] = randomValue;
 	this.logBoard();
-	return freeCell;
+	return { cellNumber: freeCell, cellValue: randomValue};
 };
 
 Board.prototype.logBoard = function(){

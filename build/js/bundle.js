@@ -5,9 +5,11 @@ var Painter = require('./painter');
 var MyPainter = new Painter();
 var putato = new Board(4) 
 console.log(putato);
-putato.randomCell();
-putato.randomCell();
+//putato.randomCell();
+//putato.randomCell();
+MyPainter.paintCell(putato.randomCell());
 
+MyPainter.paintCell(putato.randomCell());
 
 },{"./board":2,"./painter":3}],2:[function(require,module,exports){
 function Board(size){
@@ -32,7 +34,8 @@ function Board(size){
 Board.prototype.randomCell = function(){
 	var randomNumber;
 	var i = 0, j = 0;
-
+	var freeCell, x, y, randomValue;
+	var valueMappings = [2,2,2,2,4];
 	var flatBoard = [];
 	
 	//Traverse Array
@@ -45,18 +48,19 @@ Board.prototype.randomCell = function(){
 	}
 	if(!flatBoard.length){
 		console.log("Gameover");
-		return "Gameover";
+		return {gameover:true};
 	}
 	console.log(flatBoard);	
 	randomNumber = Math.floor((Math.random() * flatBoard.length));
 	//convert randomNumber to coordinates
-	var freeCell = flatBoard[randomNumber];
-	var x = Math.floor(freeCell/this.boardWitdh);
-	var y = freeCell % this.boardWitdh;
+	freeCell = flatBoard[randomNumber];
+	x = Math.floor(freeCell/this.boardWitdh);
+	y = freeCell % this.boardWitdh;
 
-	this.leBoard[x][y] = 1;
+	var randomValue = valueMappings[Math.floor((Math.random() * valueMappings.length))];
+	this.leBoard[x][y] = randomValue;
 	this.logBoard();
-	return freeCell;
+	return { cellNumber: freeCell, cellValue: randomValue};
 };
 
 Board.prototype.logBoard = function(){
@@ -76,6 +80,19 @@ function Painter(){
   var ctx;
   var blockSize = 40;
   var separation = 2;
+  var colorMappings = {
+    '2': 'rgb(238, 228, 218)',
+    '4':'rgb(237, 224, 200)',
+    '8':'rgb(242, 177, 121)',
+    '16':'rgb(245, 149, 99)',
+    '32':'rgb(246, 124, 95)',
+    '64':'rgb(246, 94, 59)',
+    '128':'rgb(237, 207, 114)',
+    '256':'rgb(237, 204, 97)',
+    '512':'rgb(237, 200, 80)',
+    '1024':'rgb(237, 197, 63)',
+    '2048':'rgb(237, 194, 46)'
+  };
 
   if(canvas.getContext){
   	ctx = canvas.getContext('2d');
@@ -88,6 +105,20 @@ function Painter(){
         roundedRect(ctx,(40+separation)*i,(40+separation)*j,blockSize,blockSize,4);
     	}
   	}
+  }
+
+  //opts.cellNumber , opts.cellValue, opts.gameover
+  this.paintCell = function(opts){
+    console.log(opts);
+    if (!opts.gameover){
+      var x = Math.floor(opts.cellNumber/4);
+      var y = opts.cellNumber%4;
+      console.log(opts.cellNumber,x,y);
+
+      ctx.beginPath(); 
+      ctx.fillStyle = colorMappings[opts.cellValue.toString()];
+      roundedRect(ctx,(40+separation)*x,(40+separation)*y,blockSize,blockSize,4);
+    }
   }
 }
 
