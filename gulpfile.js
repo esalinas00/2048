@@ -6,6 +6,7 @@ var uglify = require('gulp-uglify');
 var jshint = require('gulp-jshint');
 var changed = require('gulp-changed');
 var connect = require('gulp-connect');
+var del = require('del');
 
 gulp.task('sass',function(){
 	return gulp.src('src/sass/**.scss')
@@ -33,6 +34,10 @@ gulp.task('connect',function(){
 		host:'2048.dev',
 		livereload: true
 	});
+});
+
+gulp.task('clean',function(cb){
+	del(['build/@(css|js|imgs)/*'],cb);
 });
 
 gulp.task('html',function(){
