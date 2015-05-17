@@ -28,6 +28,14 @@ function Painter(){
         roundedRect(ctx,(40+separation)*i,(40+separation)*j,blockSize,blockSize,4);
     	}
   	}
+    /**
+    Font sizes for serif
+    X : 34px
+    XX : 28px;
+    XXX: 22px;
+    XXXX: 18px;
+    **/    
+    
   }
 
   //opts.cellNumber , opts.cellValue, opts.gameover
@@ -41,6 +49,26 @@ function Painter(){
       ctx.beginPath(); 
       ctx.fillStyle = colorMappings[opts.cellValue.toString()];
       roundedRect(ctx,(40+separation)*x,(40+separation)*y,blockSize,blockSize,4);
+
+      if(opts.cellValue <= 4) {
+        ctx.fillStyle = "rgb(119, 110, 101)";
+      } else {
+        ctx.fillStyle = "rgb(249, 246, 242)";  
+      }
+
+      if(Math.floor(opts.cellValue/1000)){
+         ctx.font = "18px serif";
+      } else if(Math.floor(opts.cellValue/100)){
+        ctx.font = "22px serif";
+      } else if(Math.floor(opts.cellValue/10)){
+        ctx.font = "28px serif";
+      } else {
+        ctx.font = "34px serif";
+      }
+      
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(opts.cellValue.toString(), (40+separation)*x + 20, (40+separation)*y + 20);
     }
   }
 }
