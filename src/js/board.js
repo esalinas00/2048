@@ -74,6 +74,13 @@ Board.prototype.slide = function(direction){
 	var lastPos = 99;
 	var event;
 	var changed = false;
+	var recentlyMerged = [];
+	for (var im = 0; i < this.leBoard.length; im++) {
+		recentlyMerged.push([]);
+		for (var jm = 0; i < this.leBoard.length; jm++) {
+			recentlyMerged[im][jm] = false;
+		};
+	};
 	//lets start with slide up;
 	var emptyCells = 0;
 	if(direction === "up"){
