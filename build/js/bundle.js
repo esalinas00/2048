@@ -92,9 +92,9 @@ Board.prototype.slide = function(direction){
 	var event;
 	var changed = false;
 	var recentlyMerged = [];
-	for (var im = 0; i < this.leBoard.length; im++) {
+	for (var im = 0; im < this.leBoard.length; im++) {
 		recentlyMerged.push([]);
-		for (var jm = 0; i < this.leBoard.length; jm++) {
+		for (var jm = 0; jm < this.leBoard.length; jm++) {
 			recentlyMerged[im][jm] = false;
 		};
 	};
@@ -118,7 +118,8 @@ Board.prototype.slide = function(direction){
 					for(var k = y - 1 ; k >= 0; k-=1){
 						if(this.leBoard[k][x] === 0){
 							lastPos = k;
-						}else if(this.leBoard[k][x] === this.leBoard[y][x]){
+						}else if(this.leBoard[k][x] === this.leBoard[y][x] && recentlyMerged[k][x] === false){
+							recentlyMerged[k][x] = true;
 							lastPos = k;
 							break;
 						} else {
@@ -157,7 +158,8 @@ Board.prototype.slide = function(direction){
 					for(var k = y + 1 ; k < this.leBoard.length; k+=1){
 						if(this.leBoard[k][x] === 0){
 							lastPos = k;
-						}else if(this.leBoard[k][x] === this.leBoard[y][x]){
+						}else if(this.leBoard[k][x] === this.leBoard[y][x] && recentlyMerged[k][x] === false){
+							recentlyMerged[k][x] = true;
 							lastPos = k;
 							break;
 						} else {
