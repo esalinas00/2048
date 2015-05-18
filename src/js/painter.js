@@ -28,23 +28,13 @@ function Painter(){
         roundedRect(ctx,(40+separation)*i,(40+separation)*j,blockSize,blockSize,4);
     	}
   	}
-    /**
-    Font sizes for serif
-    X : 34px
-    XX : 28px;
-    XXX: 22px;
-    XXXX: 18px;
-    **/    
-    
   }
 
   //opts.cellNumber , opts.cellValue, opts.gameover
   this.paintCell = function(opts){
-    console.log(opts);
     if (!opts.gameover){
       var x = Math.floor(opts.cellNumber/4);
       var y = opts.cellNumber%4;
-      console.log(opts.cellNumber,x,y);
 
       ctx.beginPath(); 
       ctx.fillStyle = colorMappings[opts.cellValue.toString()];

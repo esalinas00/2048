@@ -13,11 +13,16 @@ function Board(size){
 				this.leBoard[i][j] = 0;
 			}
 		}
-	}
+		this.randomCell();
+		this.randomCell();
+	}	
 	initBoard.call(this);
 }
 
 Board.prototype.randomCell = function(){
+	var event;
+	
+
 	var randomNumber;
 	var i = 0, j = 0;
 	var freeCell, x, y, randomValue;
@@ -34,6 +39,8 @@ Board.prototype.randomCell = function(){
 	}
 	if(!flatBoard.length){
 		console.log("Gameover");
+		event = new CustomEvent('newCell', { 'detail': {gameover: true} });
+		document.dispatchEvent(event);
 		return {gameover:true};
 	}
 	console.log(flatBoard);	
@@ -46,7 +53,9 @@ Board.prototype.randomCell = function(){
 	var randomValue = valueMappings[Math.floor((Math.random() * valueMappings.length))];
 	this.leBoard[x][y] = randomValue;
 	this.logBoard();
-	return { cellNumber: freeCell, cellValue: randomValue};
+	event = new CustomEvent('newCell', { 'detail': { cellNumber: freeCell, cellValue: randomValue, gameover: false} });
+	document.dispatchEvent(event);
+	return { cellNumber: freeCell, cellValue: randomValue, gameover: false};
 };
 
 Board.prototype.logBoard = function(){

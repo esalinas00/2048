@@ -3,13 +3,45 @@ var Board = require('./board');
 var Painter = require('./painter');
 
 var MyPainter = new Painter();
-var putato = new Board(4) 
-console.log(putato);
-//putato.randomCell();
-//putato.randomCell();
-MyPainter.paintCell(putato.randomCell());
+document.addEventListener('newCell',function(e){
+  console.log('New Cell event triggered');
+  MyPainter.paintCell(e.detail);
+},false);
+var putato = new Board(4);
+//console.log(putato);
+//MyPainter.paintCell(putato.randomCell());
+//MyPainter.paintCell(putato.randomCell());
 
-MyPainter.paintCell(putato.randomCell());
+
+//event handler
+function keyHandler(e){
+  switch(e.which){
+    case 38:
+    case 87:
+      //console.log("Up action");
+      //code here
+      break;
+    case 39:
+    case 68:
+      //console.log("Right action");
+      //code here
+      break;
+    case 40:
+    case 83:
+      //console.log("Down action");
+      //code here
+      break;
+    case 37:
+    case 65:
+      //console.log("Left action");
+      //code here
+      break;
+    default:
+      break;   
+  }
+}
+document.addEventListener('keydown',keyHandler,false);
+
 
 },{"./board":2,"./painter":3}],2:[function(require,module,exports){
 function Board(size){
@@ -27,11 +59,16 @@ function Board(size){
 				this.leBoard[i][j] = 0;
 			}
 		}
-	}
+		this.randomCell();
+		this.randomCell();
+	}	
 	initBoard.call(this);
 }
 
 Board.prototype.randomCell = function(){
+	var event;
+	
+
 	var randomNumber;
 	var i = 0, j = 0;
 	var freeCell, x, y, randomValue;
@@ -48,6 +85,8 @@ Board.prototype.randomCell = function(){
 	}
 	if(!flatBoard.length){
 		console.log("Gameover");
+		event = new CustomEvent('newCell', { 'detail': {gameover: true} });
+		document.dispatchEvent(event);
 		return {gameover:true};
 	}
 	console.log(flatBoard);	
@@ -60,7 +99,9 @@ Board.prototype.randomCell = function(){
 	var randomValue = valueMappings[Math.floor((Math.random() * valueMappings.length))];
 	this.leBoard[x][y] = randomValue;
 	this.logBoard();
-	return { cellNumber: freeCell, cellValue: randomValue};
+	event = new CustomEvent('newCell', { 'detail': { cellNumber: freeCell, cellValue: randomValue, gameover: false} });
+	document.dispatchEvent(event);
+	return { cellNumber: freeCell, cellValue: randomValue, gameover: false};
 };
 
 Board.prototype.logBoard = function(){
@@ -105,23 +146,13 @@ function Painter(){
         roundedRect(ctx,(40+separation)*i,(40+separation)*j,blockSize,blockSize,4);
     	}
   	}
-    /**
-    Font sizes for serif
-    X : 34px
-    XX : 28px;
-    XXX: 22px;
-    XXXX: 18px;
-    **/    
-    
   }
 
   //opts.cellNumber , opts.cellValue, opts.gameover
   this.paintCell = function(opts){
-    console.log(opts);
     if (!opts.gameover){
       var x = Math.floor(opts.cellNumber/4);
       var y = opts.cellNumber%4;
-      console.log(opts.cellNumber,x,y);
 
       ctx.beginPath(); 
       ctx.fillStyle = colorMappings[opts.cellValue.toString()];
