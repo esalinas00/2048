@@ -72,13 +72,15 @@ Board.prototype.slide = function(direction){
 	console.log("Direction: "+direction);
 	var y = 0, x = 0;
 	var lastPos = 99;
+	var event;
+	var changed = false;
 	//lets start with slide up;
 	var emptyCells = 0;
 	if(direction === "up"){
-		console.log("we entered the for");
+		//console.log("we entered the for");
 		for(;y<this.leBoard.length;y+=1){
 			x=0;
-			console.log("y-cycle: ",y,this.leBoard[y]);
+			//console.log("y-cycle: ",y,this.leBoard[y]);
 			for(;x<this.leBoard.length;x+=1){
 				//console.log("x-cycle: ",x);
 				lastPos = 99;
@@ -88,7 +90,7 @@ Board.prototype.slide = function(direction){
 						emptyCells += 1;
 					}
 				} else if(this.leBoard[y][x] !== 0){
-					console.log("we are in a filled cell ","y: ",y,"x: ",x);
+					//console.log("we are in a filled cell ","y: ",y,"x: ",x);
 					for(var k = y; k >= 0; k-=1){
 						if(this.leBoard[k][x] === 0){
 							lastPos = k;
@@ -101,12 +103,20 @@ Board.prototype.slide = function(direction){
 
 				if(lastPos !== 99){
 					this.leBoard[lastPos][x] = this.leBoard[y][x];
-					this.leBoard[y][x] = 0; 
+					this.leBoard[y][x] = 0;
+					changed = true;
 				}
 			}
 		}	
 	}
-	console.log("EMPTY CELLS: ",emptyCells);
-	this.logBoard();
+
+	//this.logBoard();
+	if(changed){
+		event = new CustomEvent('redraw', { 'detail': {board: this.leBoard} });
+		document.dispatchEvent(event);
+		this.randomCell(); 
+	}
+	//console.log("EMPTY CELLS: ",emptyCells);
+	
 };
 module.exports = Board;

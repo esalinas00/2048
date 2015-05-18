@@ -8,5 +8,8 @@ document.addEventListener('newCell',function(e){
   MyPainter.paintCell(e.detail);
 },false);
 var putato = new Board(4);
-
+document.addEventListener('redraw',function(e){
+  console.log('Redraw event triggered');
+  MyPainter.redraw(e.detail.board);
+},false);
 var MyHandler = new Handler(putato.slide.bind(putato));

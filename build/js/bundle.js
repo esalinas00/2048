@@ -9,7 +9,10 @@ document.addEventListener('newCell',function(e){
   MyPainter.paintCell(e.detail);
 },false);
 var putato = new Board(4);
-
+document.addEventListener('redraw',function(e){
+  console.log('Redraw event triggered');
+  MyPainter.redraw(e.detail.board);
+},false);
 var MyHandler = new Handler(putato.slide.bind(putato));
 },{"./board":2,"./handler":3,"./painter":4}],2:[function(require,module,exports){
 function Board(size){
@@ -86,13 +89,15 @@ Board.prototype.slide = function(direction){
 	console.log("Direction: "+direction);
 	var y = 0, x = 0;
 	var lastPos = 99;
+	var event;
+	var changed = false;
 	//lets start with slide up;
 	var emptyCells = 0;
 	if(direction === "up"){
-		console.log("we entered the for");
+		//console.log("we entered the for");
 		for(;y<this.leBoard.length;y+=1){
 			x=0;
-			console.log("y-cycle: ",y,this.leBoard[y]);
+			//console.log("y-cycle: ",y,this.leBoard[y]);
 			for(;x<this.leBoard.length;x+=1){
 				//console.log("x-cycle: ",x);
 				lastPos = 99;
@@ -102,7 +107,7 @@ Board.prototype.slide = function(direction){
 						emptyCells += 1;
 					}
 				} else if(this.leBoard[y][x] !== 0){
-					console.log("we are in a filled cell ","y: ",y,"x: ",x);
+					//console.log("we are in a filled cell ","y: ",y,"x: ",x);
 					for(var k = y; k >= 0; k-=1){
 						if(this.leBoard[k][x] === 0){
 							lastPos = k;
@@ -115,13 +120,21 @@ Board.prototype.slide = function(direction){
 
 				if(lastPos !== 99){
 					this.leBoard[lastPos][x] = this.leBoard[y][x];
-					this.leBoard[y][x] = 0; 
+					this.leBoard[y][x] = 0;
+					changed = true;
 				}
 			}
 		}	
 	}
-	console.log("EMPTY CELLS: ",emptyCells);
-	this.logBoard();
+
+	//this.logBoard();
+	if(changed){
+		event = new CustomEvent('redraw', { 'detail': {board: this.leBoard} });
+		document.dispatchEvent(event);
+		this.randomCell(); 
+	}
+	//console.log("EMPTY CELLS: ",emptyCells);
+	
 };
 module.exports = Board;
 },{}],3:[function(require,module,exports){
@@ -168,6 +181,7 @@ function Painter(){
   var blockSize = 40;
   var separation = 2;
   var colorMappings = {
+    '0' : "#C0C0C0",
     '2': 'rgb(238, 228, 218)',
     '4':'rgb(237, 224, 200)',
     '8':'rgb(242, 177, 121)',
@@ -222,7 +236,19 @@ function Painter(){
       
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(opts.cellValue.toString(), (40+separation)*j + 20, (40+separation)*i + 20);
+      //ctx.fillText(opts.cellValue.toString() == 0 ? "":opts.cellValue.toString(), (40+separation)*j + 20, (40+separation)*i + 20);
+      ctx.fillText(opts.cellValue || "" , (40+separation)*j + 20, (40+separation)*i + 20);
+    }
+  }
+
+  this.redraw = function(board){
+    var i = 0,j;
+    for(;i < board.length; i+=1){
+      j = 0;
+      for(;j < board.length; j+=1){
+        var cellNumber = i*board.length + j;
+        this.paintCell({cellNumber:cellNumber,cellValue:board[i][j]});
+      } 
     }
   }
 }

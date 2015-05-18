@@ -4,6 +4,7 @@ function Painter(){
   var blockSize = 40;
   var separation = 2;
   var colorMappings = {
+    '0' : "#C0C0C0",
     '2': 'rgb(238, 228, 218)',
     '4':'rgb(237, 224, 200)',
     '8':'rgb(242, 177, 121)',
@@ -58,7 +59,19 @@ function Painter(){
       
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(opts.cellValue.toString(), (40+separation)*j + 20, (40+separation)*i + 20);
+      //ctx.fillText(opts.cellValue.toString() == 0 ? "":opts.cellValue.toString(), (40+separation)*j + 20, (40+separation)*i + 20);
+      ctx.fillText(opts.cellValue || "" , (40+separation)*j + 20, (40+separation)*i + 20);
+    }
+  }
+
+  this.redraw = function(board){
+    var i = 0,j;
+    for(;i < board.length; i+=1){
+      j = 0;
+      for(;j < board.length; j+=1){
+        var cellNumber = i*board.length + j;
+        this.paintCell({cellNumber:cellNumber,cellValue:board[i][j]});
+      } 
     }
   }
 }
