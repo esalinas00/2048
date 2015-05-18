@@ -179,6 +179,84 @@ Board.prototype.slide = function(direction){
 				}
 			}
 		}	
+	}else if(direction === "right"){
+		//console.log("we entered the for");
+		for(;y<this.leBoard.length;y+=1){
+			x=this.leBoard.length - 1;
+			//console.log("y-cycle: ",y,this.leBoard[y]);
+			for(;x >= 0;x -=1){
+				//console.log("x-cycle: ",x);
+				lastPos = 99;
+				if(x == 3 ) {
+					//do nothing
+					if(this.leBoard[y][x] === 0) {
+						emptyCells += 1;
+					}
+				} else if(this.leBoard[y][x] !== 0){
+					//console.log("we are in a filled cell ","y: ",y,"x: ",x);
+					for(var k = x + 1 ; k < this.leBoard.length; k+=1){
+						if(this.leBoard[y][k] === 0){
+							lastPos = k;
+						}else if(this.leBoard[y][k] === this.leBoard[y][x] && recentlyMerged[y][k] === false){
+							recentlyMerged[y][k] = true;
+							lastPos = k;
+							break;
+						} else {
+							break;
+						}
+
+					}
+				} else {
+					//empy cells in other ys
+					emptyCells += 1;
+				}
+
+				if(lastPos !== 99){
+					this.leBoard[y][lastPos] += this.leBoard[y][x];
+					this.leBoard[y][x] = 0;
+					changed = true;
+				}
+			}
+		}	
+	}else if(direction === "left"){
+		//console.log("we entered the for");
+		for(;y<this.leBoard.length;y+=1){
+			x= 0;
+			//console.log("y-cycle: ",y,this.leBoard[y]);
+			for(;x < this.leBoard.length; x +=1){
+				//console.log("x-cycle: ",x);
+				lastPos = 99;
+				if(x == 0 ) {
+					//do nothing
+					if(this.leBoard[y][x] === 0) {
+						emptyCells += 1;
+					}
+				} else if(this.leBoard[y][x] !== 0){
+					//console.log("we are in a filled cell ","y: ",y,"x: ",x);
+					for(var k = x - 1 ; k >= 0; k-=1){
+						if(this.leBoard[y][k] === 0){
+							lastPos = k;
+						}else if(this.leBoard[y][k] === this.leBoard[y][x] && recentlyMerged[y][k] === false){
+							recentlyMerged[y][k] = true;
+							lastPos = k;
+							break;
+						} else {
+							break;
+						}
+
+					}
+				} else {
+					//empy cells in other ys
+					emptyCells += 1;
+				}
+
+				if(lastPos !== 99){
+					this.leBoard[y][lastPos] += this.leBoard[y][x];
+					this.leBoard[y][x] = 0;
+					changed = true;
+				}
+			}
+		}	
 	}
 
 	//this.logBoard();
