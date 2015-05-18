@@ -17,6 +17,10 @@ document.addEventListener('win',function(e){
   console.log('win event triggered');
   alert(e.detail);
 },false);
+document.addEventListener('gameover',function(e){
+  console.log('gameover event triggered');
+  alert(e.detail);
+},false);
 var MyHandler = new Handler(putato.slide.bind(putato));
 },{"./board":2,"./handler":3,"./painter":4}],2:[function(require,module,exports){
 function Board(size){
@@ -40,7 +44,7 @@ function Board(size){
 }
 
 Board.prototype.randomCell = function(){
-	var event;
+	var event,gevent;
 	var randomNumber;
 	var i = 0, j = 0;
 	var freeCell, pi, pj, randomValue;
@@ -55,13 +59,13 @@ Board.prototype.randomCell = function(){
 			}
 		}
 	}
+	console.log(flatBoard);
 	if(!flatBoard.length){
 		console.log("Gameover");
 		event = new CustomEvent('newCell', { 'detail': {gameover: true} });
 		document.dispatchEvent(event);
 		return {gameover:true};
-	}
-	console.log(flatBoard);	
+	}	
 	randomNumber = Math.floor((Math.random() * flatBoard.length));
 	//convert randomNumber to coordinates
 	freeCell = flatBoard[randomNumber];
@@ -70,7 +74,6 @@ Board.prototype.randomCell = function(){
 
 	var randomValue = valueMappings[Math.floor((Math.random() * valueMappings.length))];
 	this.leBoard[pi][pj] = randomValue;
-	this.logBoard();
 	event = new CustomEvent('newCell', { 'detail': { cellNumber: freeCell, cellValue: randomValue, gameover: false} });
 	document.dispatchEvent(event);
 	return { cellNumber: freeCell, cellValue: randomValue, gameover: false};
@@ -93,7 +96,7 @@ Board.prototype.slide = function(direction){
 	console.log("Direction: "+direction);
 	var y = 0, x = 0;
 	var lastPos = 99;
-	var event;
+	var event, gevent;
 	var changed = false;
 	var recentlyMerged = [];
 	for (var im = 0; im < this.leBoard.length; im++) {
@@ -286,7 +289,45 @@ Board.prototype.slide = function(direction){
 		this.randomCell(); 
 	}
 	//console.log("EMPTY CELLS: ",emptyCells);
-	
+	if (this.gameIsOver()){
+		console.log("GAMEOVER!!!!!!!");
+		gevent = new CustomEvent('gameover', { 'detail': 'You lost.' });
+		document.dispatchEvent(gevent);
+	}
+};
+//Check if player has no move lefts aka lost
+Board.prototype.gameIsOver = function(){
+	var i = 0,j,itsOver = true;
+	var board = this.leBoard;
+	var length = this.boardWitdh;
+
+	for(;i < length;i+=1){
+		j=0;
+		for(;j < length; j+=1){
+			if(i > 0 && board[i-1][j] === board[i][j]){
+				itsOver = false;
+				break;
+			}
+			if((i < length -1) && board[i+1][j] === board[i][j]){
+				itsOver = false;
+				break;
+			}
+			if(j > 0 && board[i][j-1] === board[i][j]){
+				itsOver = false;
+				break;
+			}
+			if( (j < length-1) && board[i][j+1] === board[i][j]){
+				itsOver = false;
+				break;
+			}
+			if(board[i][j] === 0){
+				itsOver = false;
+				break;	
+			}
+		}
+	}
+	console.log("IS IT OVER??: ",itsOver);
+	return itsOver;
 };
 module.exports = Board;
 },{}],3:[function(require,module,exports){

@@ -16,4 +16,8 @@ document.addEventListener('win',function(e){
   console.log('win event triggered');
   alert(e.detail);
 },false);
+document.addEventListener('gameover',function(e){
+  console.log('gameover event triggered');
+  alert(e.detail);
+},false);
 var MyHandler = new Handler(putato.slide.bind(putato));

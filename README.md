@@ -25,7 +25,7 @@ npm install
 gulp 
 ```
 ## Enter with your browser
-http://localhost:8080/
+http://2048.dev:8081/
 
 ## Enjoy
 
