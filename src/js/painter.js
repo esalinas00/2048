@@ -33,12 +33,12 @@ function Painter(){
   //opts.cellNumber , opts.cellValue, opts.gameover
   this.paintCell = function(opts){
     if (!opts.gameover){
-      var x = Math.floor(opts.cellNumber/4);
-      var y = opts.cellNumber%4;
+      var i = Math.floor(opts.cellNumber/4);
+      var j = opts.cellNumber%4;
 
       ctx.beginPath(); 
       ctx.fillStyle = colorMappings[opts.cellValue.toString()];
-      roundedRect(ctx,(40+separation)*x,(40+separation)*y,blockSize,blockSize,4);
+      roundedRect(ctx,(40+separation)*j,(40+separation)*i,blockSize,blockSize,4);
 
       if(opts.cellValue <= 4) {
         ctx.fillStyle = "rgb(119, 110, 101)";
@@ -58,7 +58,7 @@ function Painter(){
       
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(opts.cellValue.toString(), (40+separation)*x + 20, (40+separation)*y + 20);
+      ctx.fillText(opts.cellValue.toString(), (40+separation)*j + 20, (40+separation)*i + 20);
     }
   }
 }
