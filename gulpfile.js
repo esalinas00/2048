@@ -70,7 +70,7 @@ gulp.task('js',function(){
 
 gulp.task('connect',function(){
 	connect.server({
-		port: 8080,
+		port: 8081,
 		host:'2048.dev',
 		livereload: true
 	});

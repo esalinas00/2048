@@ -117,6 +117,10 @@ Board.prototype.slide = function(direction){
 
 				if(lastPos !== 99){
 					this.leBoard[lastPos][x] += this.leBoard[y][x];
+					if(this.leBoard[lastPos][x] >= 2048){
+						event = new CustomEvent('win', { 'detail': 'Congratulations you won' });
+						document.dispatchEvent(event);
+					}
 					this.leBoard[y][x] = 0;
 					changed = true;
 				}
@@ -157,6 +161,10 @@ Board.prototype.slide = function(direction){
 				
 				if(lastPos !== 99){
 					this.leBoard[lastPos][x] += this.leBoard[y][x];
+					if(this.leBoard[lastPos][x] >= 2048){
+						event = new CustomEvent('win', { 'detail': 'Congratulations you won' });
+						document.dispatchEvent(event);
+					}
 					this.leBoard[y][x] = 0;
 					changed = true;
 				}
@@ -196,6 +204,10 @@ Board.prototype.slide = function(direction){
 
 				if(lastPos !== 99){
 					this.leBoard[y][lastPos] += this.leBoard[y][x];
+					if(this.leBoard[y][lastPos] >= 2048){
+						event = new CustomEvent('win', { 'detail': 'Congratulations you won' });
+						document.dispatchEvent(event);
+					}
 					this.leBoard[y][x] = 0;
 					changed = true;
 				}
@@ -235,6 +247,10 @@ Board.prototype.slide = function(direction){
 
 				if(lastPos !== 99){
 					this.leBoard[y][lastPos] += this.leBoard[y][x];
+					if(this.leBoard[y][lastPos] >= 2048){
+						event = new CustomEvent('win', { 'detail': 'Congratulations you won' });
+						document.dispatchEvent(event);
+					}
 					this.leBoard[y][x] = 0;
 					changed = true;
 				}

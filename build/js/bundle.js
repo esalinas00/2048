@@ -13,6 +13,10 @@ document.addEventListener('redraw',function(e){
   console.log('Redraw event triggered');
   MyPainter.redraw(e.detail.board);
 },false);
+document.addEventListener('win',function(e){
+  console.log('win event triggered');
+  alert(e.detail);
+},false);
 var MyHandler = new Handler(putato.slide.bind(putato));
 },{"./board":2,"./handler":3,"./painter":4}],2:[function(require,module,exports){
 function Board(size){
@@ -134,6 +138,10 @@ Board.prototype.slide = function(direction){
 
 				if(lastPos !== 99){
 					this.leBoard[lastPos][x] += this.leBoard[y][x];
+					if(this.leBoard[lastPos][x] >= 2048){
+						event = new CustomEvent('win', { 'detail': 'Congratulations you won' });
+						document.dispatchEvent(event);
+					}
 					this.leBoard[y][x] = 0;
 					changed = true;
 				}
@@ -174,6 +182,10 @@ Board.prototype.slide = function(direction){
 				
 				if(lastPos !== 99){
 					this.leBoard[lastPos][x] += this.leBoard[y][x];
+					if(this.leBoard[lastPos][x] >= 2048){
+						event = new CustomEvent('win', { 'detail': 'Congratulations you won' });
+						document.dispatchEvent(event);
+					}
 					this.leBoard[y][x] = 0;
 					changed = true;
 				}
@@ -213,6 +225,10 @@ Board.prototype.slide = function(direction){
 
 				if(lastPos !== 99){
 					this.leBoard[y][lastPos] += this.leBoard[y][x];
+					if(this.leBoard[y][lastPos] >= 2048){
+						event = new CustomEvent('win', { 'detail': 'Congratulations you won' });
+						document.dispatchEvent(event);
+					}
 					this.leBoard[y][x] = 0;
 					changed = true;
 				}
@@ -252,6 +268,10 @@ Board.prototype.slide = function(direction){
 
 				if(lastPos !== 99){
 					this.leBoard[y][lastPos] += this.leBoard[y][x];
+					if(this.leBoard[y][lastPos] >= 2048){
+						event = new CustomEvent('win', { 'detail': 'Congratulations you won' });
+						document.dispatchEvent(event);
+					}
 					this.leBoard[y][x] = 0;
 					changed = true;
 				}

@@ -30,8 +30,15 @@ http://localhost:8080/
 ## Enjoy
 
 TODO:
+
 1. Add animations
+
 2. Improve Code reusability in slide logic
+
 3. Change modules to behave as singletons
+
 4. Modify the html and css so the page looks better
+
 5. Optimize build system
+
+6. Implement a better Win message

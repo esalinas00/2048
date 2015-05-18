@@ -12,4 +12,8 @@ document.addEventListener('redraw',function(e){
   console.log('Redraw event triggered');
   MyPainter.redraw(e.detail.board);
 },false);
+document.addEventListener('win',function(e){
+  console.log('win event triggered');
+  alert(e.detail);
+},false);
 var MyHandler = new Handler(putato.slide.bind(putato));
