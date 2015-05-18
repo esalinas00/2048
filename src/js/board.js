@@ -91,10 +91,16 @@ Board.prototype.slide = function(direction){
 					}
 				} else if(this.leBoard[y][x] !== 0){
 					//console.log("we are in a filled cell ","y: ",y,"x: ",x);
-					for(var k = y; k >= 0; k-=1){
+					for(var k = y - 1 ; k >= 0; k-=1){
 						if(this.leBoard[k][x] === 0){
 							lastPos = k;
+						}else if(this.leBoard[k][x] === this.leBoard[y][x]){
+							lastPos = k;
+							break;
+						} else {
+							break;
 						}
+
 					}
 				} else {
 					//empy cells in other ys
@@ -102,7 +108,46 @@ Board.prototype.slide = function(direction){
 				}
 
 				if(lastPos !== 99){
-					this.leBoard[lastPos][x] = this.leBoard[y][x];
+					this.leBoard[lastPos][x] += this.leBoard[y][x];
+					this.leBoard[y][x] = 0;
+					changed = true;
+				}
+			}
+		}	
+	}else if(direction === "down"){
+		//console.log("DOWN, we entered the for");
+		y = this.leBoard.length -1 ;
+		for(;y >= 0; y-=1){
+			x=0;
+			console.log("y-cycle: ",y,this.leBoard[y]);
+			for(;x<this.leBoard.length;x+=1){
+				//console.log("x-cycle: ",x);
+				lastPos = 99;
+				if(y == 3 ) {
+					//do nothing
+					if(this.leBoard[y][x] === 0) {
+						emptyCells += 1;
+					}
+				} else if(this.leBoard[y][x] !== 0){
+					//console.log("we are in a filled cell ","y: ",y,"x: ",x);
+					for(var k = y + 1 ; k < this.leBoard.length; k+=1){
+						if(this.leBoard[k][x] === 0){
+							lastPos = k;
+						}else if(this.leBoard[k][x] === this.leBoard[y][x]){
+							lastPos = k;
+							break;
+						} else {
+							break;
+						}
+
+					}
+				} else {
+					//empy cells in other ys
+					emptyCells += 1;
+				}
+				
+				if(lastPos !== 99){
+					this.leBoard[lastPos][x] += this.leBoard[y][x];
 					this.leBoard[y][x] = 0;
 					changed = true;
 				}
